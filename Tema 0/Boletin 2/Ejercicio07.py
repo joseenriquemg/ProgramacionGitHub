@@ -11,8 +11,13 @@ def añadir_contactos():
     nuevo_nombre = input("Introduce el nombre: ")
     nuevo_numero = input("Introduce el numero: ")
 
-    
-    agenda[nuevo_nombre] = nuevo_numero
+    if (agenda.get(nuevo_nombre) == None): 
+
+        agenda[nuevo_nombre] = nuevo_numero
+
+    else: 
+
+        print("El usuario ya existe")
 
 def eliminar_contactos(usuario):
 
@@ -20,13 +25,21 @@ def eliminar_contactos(usuario):
 
         agenda.pop(usuario)
 
-        print("Se ha añadido a", usuario, "correctamente.")
+        print("Se ha eliminado a", usuario, "correctamente.")
 
     else:
 
         print("No existe el contacto.")
 
-#def buscar_contactos(contactos):
+def buscar_contactos(usuario):
+
+    if (agenda.get(usuario)):
+
+        print("El numero de", usuario, "es", agenda.get(usuario))
+    
+    else:
+
+        print("No se ha encontrado al usuario")
 
 
 def mostrar_contactos():
@@ -59,6 +72,12 @@ while (opcion != 5):
         persona_eliminar = input("¿A quien deseas eliminar?")
 
         eliminar_contactos(persona_eliminar)
+    
+    elif (opcion == 3):
+
+        persona_buscar = input("¿A quien deseas buscar?")
+
+        buscar_contactos(persona_buscar)
 
     elif (opcion == 4):
 
@@ -67,3 +86,6 @@ while (opcion != 5):
     menu()
 
     opcion = int(input("¿Que deseas hacer?"))
+
+
+print("Saliendo del sistema...")
