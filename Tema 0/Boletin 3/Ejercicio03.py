@@ -10,17 +10,37 @@ estará en (3,6).
 parámetro (distancia entre dos coordenadas). 
 '''
 
+import math
+
 class Punto:
 
     def __init__(self, coordenadaX, coordenadaY):
+       
         self.coordenadaX = coordenadaX
         self.coordenadaY = coordenadaY
 
 
     def __str__(self):
+        
         return ("Punto: (", self.coordenadaX, ',', self.coordenadaY, ')')
     
 
-     
+    def setXY(self, dx, dy):
+
+        self.coordenadaX = dx 
+        self.coordenadaY = dy
+
+    def desplaza(self, dx, dy):
+
+        self.coordenadaX += dx 
+        self.coordenadaY += dy
+
+    def distancia(self, punto):
+        """Calcula la distancia entre el propio punto y otro punto dado."""
+        dx = punto.x - self.x
+        dy = punto.y - self.y
+        return math.sqrt(dx**2 + dy**2)
+
+
 
 
