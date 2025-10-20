@@ -29,7 +29,7 @@ class Libro:
 
             self.prestados += 1
 
-            print("Se puede realizar el prestamo")
+            print("Prestamo realizado con exito")
 
         else:
 
@@ -44,7 +44,7 @@ class Libro:
 
             self.ejemplares -= 1
 
-            print("Se puede realizar la devolucion")
+            print("Devolucion realizada con exito")
 
         else:
 
