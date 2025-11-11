@@ -53,3 +53,13 @@ def register(user: userDB):
         return user
     else: 
         raise HTTPException(status_code=409, detail="El usuario ya existe")
+
+
+if password_hash.verify(form.password, user["password"]):
+    expire = datatime.now(timezone.utc) + timedelta(minutes = ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = {"sub":user.username, "exp": expire}
+    # Generamos el token
+    token = jwt.encode(access_token, SECRET_KEY, algorithm=ALGORITHM)
+    return {"access_token":token, "token_type":"bearer"}
+#raise HTTPException(status_code=401, detail="Contraseña incorrecta")
+raise HTTPException(status_code=401, detail="Usuario o Contraseña incorrectos")
