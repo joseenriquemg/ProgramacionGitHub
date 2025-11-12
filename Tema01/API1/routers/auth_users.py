@@ -1,9 +1,10 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 import jwt
 from jwt.exceptions import InvalidTokenError
 from pwdlib import PasswordHash
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from datetime import *
 
 #app = FastAPI()
 oautha2 = OAuth2PasswordBearer(tokenUrl="login")
@@ -54,12 +55,25 @@ def register(user: userDB):
     else: 
         raise HTTPException(status_code=409, detail="El usuario ya existe")
 
+@router.post("/login")
+async def login(form: OAuth2PasswordRequestForm = Depends()):
+    user_db = users_db.get(form.username)
+    if user_db:
+        # Si el usuario existe en la bvase de datos
+        # Comprobamos las contraseñas
+        user = userDB(**user_db)
+        try:
+            if password_hash.verify(form.password, User["password"]):
+                expire = datetime.now(timezone.utc) + timedelta(minutes = ACCESS_TOKEN_EXPIRE_MINUTES)
+                access_token = {"sub":user.username, "exp": expire}
+                # Generamos el token
+                token = jwt.encode(access_token, SECRET_KEY, algorithm=ALGORITHM)
+                return {"access_token":token, "token_type":"bearer"}
+            
+        except:
+            #raise HTTPException(status_code=401, detail="Contraseña incorrecta")
+                raise HTTPException(status_code=400, detail="Error en la auentificacion")
+    raise HTTPException(status_code=401, detail="Usuario o Contraseña incorrectos")
 
-if password_hash.verify(form.password, user["password"]):
-    expire = datatime.now(timezone.utc) + timedelta(minutes = ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = {"sub":user.username, "exp": expire}
-    # Generamos el token
-    token = jwt.encode(access_token, SECRET_KEY, algorithm=ALGORITHM)
-    return {"access_token":token, "token_type":"bearer"}
-#raise HTTPException(status_code=401, detail="Contraseña incorrecta")
-raise HTTPException(status_code=401, detail="Usuario o Contraseña incorrectos")
+async def authentication(token: str = Depends(oautha2)):
+    username = jwt.decode(token, SECRET_KEY, algorithm=ALGORITHM).get("sub")
