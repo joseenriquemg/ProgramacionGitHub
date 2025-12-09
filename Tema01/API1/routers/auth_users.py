@@ -59,7 +59,7 @@ def register(user: userDB):
 async def login(form: OAuth2PasswordRequestForm = Depends()):
     user_db = users_db.get(form.username)
     if user_db:
-        # Si el usuario existe en la bvase de datos
+        # Si el usuario existe en la base de datos
         # Comprobamos las contraseñas
         user = userDB(**user_db)
         try:
