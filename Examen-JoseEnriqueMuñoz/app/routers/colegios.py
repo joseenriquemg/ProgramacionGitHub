@@ -2,7 +2,6 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from db.schemas.alumno import alumno_schema, alumnos_schema
 from db.schemas.colegio import colegio_schema, colegios_schema
-from db.models.alumno import Alumno
 from db.models.colegio import Colegio
 
 router = APIRouter(prefix="/colegios", tags=["colegios"])
